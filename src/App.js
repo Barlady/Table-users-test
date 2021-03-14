@@ -1,9 +1,9 @@
 import React from "react";
 import ReactPaginate from 'react-paginate';  
-import './App.css';
 import Table from './Table/Table';
 import TableSearch from './TableSearch/TableSearch';
 import RowView from './RowView';
+import usersArr from  './data/users1.json';
 import _ from 'lodash';     //библиотека для сортировки файлов
 
 
@@ -17,12 +17,12 @@ class App extends React.Component {
       sortField: 'id', // поле по умолчанию
       row: null,
       currentPage: 0,
+      
     }
   }
-  async componentDidMount() {
-    const response = await fetch(` http://www.filltext.com/?rows=1000&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}`)
-    const data = await response.json()
-    this.setState({data: _.orderBy(data, this.state.sortField, this.state.sort)})
+   componentDidMount() {
+    this.setState({ data: _.orderBy(usersArr, this.state.sortField, this.state.sort)});
+    
 
   }
 
@@ -36,7 +36,7 @@ class App extends React.Component {
     }
 
     onRowSelect = (row) => {
-      console.log(row);
+     
       this.setState({row : row})
     }
 
@@ -45,7 +45,7 @@ class App extends React.Component {
      
     }
     searchHandler = (search) => {
-      console.log(search);
+     
       this.setState({search, currentPage: 0})
     }
     getFilteredData(){
@@ -75,17 +75,22 @@ class App extends React.Component {
     const filteredData = this.getFilteredData();
     const pageCount = Math.ceil(filteredData.length / pageSize);
     const displayData = _.chunk(filteredData, pageSize)[this.state.currentPage];
-   
+    // console.log(displayData);
+    // console.log(this.state.data);
+    // console.log(filteredData);
+
+  
       return (
     <div className="container">
-    <TableSearch onSearch={this.searchHandler}/>
-     <Table 
-       data={displayData}
-       onSort={this.onSort}
-       sort={this.state.sort}
-       sortField={this.state.sortField}
-       onRowSelect={this.onRowSelect}
-     />
+           <TableSearch onSearch={this.searchHandler}/>
+           <Table 
+             data={displayData}
+             onSort={this.onSort}
+             sort={this.state.sort}
+             sortField={this.state.sortField}
+             onRowSelect={this.onRowSelect}
+
+           />
   {this.state.data.length > pageSize 
   ?<ReactPaginate
     previousLabel={'<'}

@@ -1,17 +1,26 @@
 import React from 'react';
+import _ from 'lodash'; 
 
 
 
 
 class Table extends React.Component {
 
+
 	render() {
-		let data = this.props.data;
-		console.log(data);
-		let onSort = this.props.onSort;
-		let sort = this.props.sort;
-		let sortField = this.props.sortField;
 		
+		const { data, onSort, sort, sortField } = this.props;
+        console.log(data);
+        let data2 = _.map(data, function (item) {
+        	return (
+        		<tr key={item.id + item.phone}>
+        		        <td>{item.id}</td>
+        		        <td>{item.firstName}</td>
+        		        <td>{item.lastName}</td>
+        	            <td>{item.email}</td>
+        		        <td>{item.phone}</td>
+        		        </tr>)
+        })
 
 		return (
 			<>
@@ -26,15 +35,8 @@ class Table extends React.Component {
              </tr>
              </thead>
              <tbody>
-                 { data.map(item =>(
-                     <tr key={item.id + item.phone}>
-                         <td>{item.id}</td>
-                         <td>{item.firstName}</td>
-                         <td>{item.lastName}</td>
-                         <td>{item.email}</td>
-                         <td>{item.phone}</td>
-                     </tr>
-                 ))}
+               {data2}
+   
              </tbody>
          </table>
          </>
